@@ -204,7 +204,12 @@ func (srv *VpnServer) cleanUp() {
 	c := make(chan os.Signal, 1)
 	signal.Notify(c, syscall.SIGINT, syscall.SIGTERM)
 	<-c
-	//clearMSS(srv.iface.Name(), true)
+	logger.Debug("clean up")
+	for key, client := range srv.clients {
+		client.ws.Close()
+		delete(srv.clients, key)
+	}
+
 	os.Exit(0)
 }
 

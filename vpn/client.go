@@ -34,7 +34,6 @@ import (
 	"time"
 
 	"fmt"
-	"io"
 )
 
 type Client struct {
@@ -135,14 +134,15 @@ func NewClient(cfg ClientConfig) error {
 
 	for {
 		messageType, r, err := connection.ReadMessage()
-		if err == io.EOF {
+		if err != nil {
 			logger.Error("Read error:", err)
-			break
-		} else if err != nil {
-			logger.Error("Read error:", err)
+			delRoute("0.0.0.0/1")
+			delRoute("128.0.0.0/1")
+			for _, dest := range client.routes {
+				delRoute(dest)
+			}
 			break
 		} else {
-			logger.Debug("Read: ", string(r))
 
 			if messageType == websocket.TextMessage {
 				client.dispatcher(r)
