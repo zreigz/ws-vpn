@@ -97,11 +97,7 @@ func (c *connection) readPump() {
 		} else {
 
 			if messageType == websocket.TextMessage {
-				var message Data
-				if err := json.Unmarshal(r, &message); err != nil {
-					logger.Panic(err)
-				}
-				c.dispatcher(&message)
+				c.dispatcher(r)
 			}
 		}
 	}
@@ -141,28 +137,38 @@ func (c *connection) writePump() {
 
 func (c *connection) write(mt int, message *Data) error {
 
-	logger.Debug("write data len: ", len(message.Payload))
-	s, err := json.Marshal(message)
-	if err != nil {
-		logger.Panic(err)
-		return err
-	}
-
 	c.ws.SetWriteDeadline(time.Now().Add(writeWait))
-	err = c.ws.WriteMessage(mt, s)
-	if err != nil {
-		return err
+
+	if message.ConnectionState == STATE_CONNECTED {
+		err := c.ws.WriteMessage(mt, message.Payload)
+		if err != nil {
+			return err
+		}
+	} else {
+		s, err := json.Marshal(message)
+		if err != nil {
+			logger.Panic(err)
+			return err
+		}
+
+
+		err = c.ws.WriteMessage(mt, s)
+		if err != nil {
+			return err
+		}
 	}
-
 	return nil
-
 }
 
-func (c *connection) dispatcher(message *Data) {
+func (c *connection) dispatcher(p []byte) {
 	logger.Debug("Dispatcher: ", c.state)
 	switch c.state {
 	case STATE_INIT:
 		logger.Debug("STATE_INIT")
+		var message Data
+		if err := json.Unmarshal(p, &message); err != nil {
+			logger.Panic(err)
+		}
 		if message.ConnectionState == STATE_CONNECT {
 			d := new(Data)
 			d.ConnectionState = STATE_CONNECT
@@ -181,13 +187,7 @@ func (c *connection) dispatcher(message *Data) {
 		}
 	case STATE_CONNECTED:
 		logger.Debug("STATE_CONNECTED")
-		if message.ConnectionState == STATE_CONNECTED {
-			logger.Debug("Data received: length ", len(message.Payload))
-			c.server.toIface <- message.Payload
-		}
-	case STATE_DISCONNECT:
-
-
+		c.server.toIface <- p
 	}
 }
 

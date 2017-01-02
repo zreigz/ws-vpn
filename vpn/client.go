@@ -145,13 +145,7 @@ func NewClient(cfg ClientConfig) error {
 			logger.Debug("Read: ", string(r))
 
 			if messageType == websocket.TextMessage {
-				var message Data
-				if err := json.Unmarshal(r, &message); err != nil {
-					client.ws.Close()
-					close(client.data)
-					logger.Panic(err)
-				}
-				client.dispatcher(&message)
+				client.dispatcher(r)
 			}
 
 		}
@@ -161,11 +155,17 @@ func NewClient(cfg ClientConfig) error {
 	return errors.New("Not expected to exit")
 }
 
-func (clt *Client) dispatcher(message *Data) {
+func (clt *Client) dispatcher(p []byte) {
 	logger.Debug("Dispatcher: ", clt.state)
 	switch clt.state {
 	case STATE_INIT:
 		logger.Debug("STATE_INIT")
+		var message Data
+		if err := json.Unmarshal(p, &message); err != nil {
+			clt.ws.Close()
+			close(clt.data)
+			logger.Panic(err)
+		}
 		if message.ConnectionState == STATE_CONNECT {
 
 			ipStr := string(message.Payload)
@@ -180,12 +180,7 @@ func (clt *Client) dispatcher(message *Data) {
 			clt.handleInterface()
 		}
 	case STATE_CONNECTED:
-	if message.ConnectionState == STATE_CONNECTED {
-		clt.toIface <- message.Payload
-	}
-
-	case STATE_DISCONNECT:
-
+		clt.toIface <- p
 
 	}
 }
@@ -250,12 +245,16 @@ func (clt *Client) writePump() {
 
 func (clt *Client) write(mt int, message *Data) error {
 
-	s, err := json.Marshal(message)
-	if err != nil {
-		logger.Panic(err)
+	if message.ConnectionState == STATE_CONNECTED {
+		return clt.ws.WriteMessage(mt, message.Payload)
+	} else {
+		s, err := json.Marshal(message)
+		if err != nil {
+			logger.Panic(err)
+		}
+		return clt.ws.WriteMessage(mt, s)
 	}
-	logger.Debug("Sending data: ", string(s))
-	return clt.ws.WriteMessage(mt, s)
+
 }
 
 func (clt *Client) cleanUp() {
@@ -263,11 +262,6 @@ func (clt *Client) cleanUp() {
 	signal.Notify(c, syscall.SIGINT, syscall.SIGTERM)
 	<-c
 	logger.Info("Cleaning Up")
-
-	if err := clt.ws.WriteControl(websocket.CloseMessage, []byte{}, time.Now().Add(writeWait)); err != nil {
-		logger.Error("Send Close Message error", err)
-	}
-
 	delRoute("0.0.0.0/1")
 	delRoute("128.0.0.0/1")
 	for _, dest := range clt.routes {

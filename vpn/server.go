@@ -87,8 +87,6 @@ func NewServer(cfg ServerConfig) error {
 	vpnServer.ipnet = &net.IPNet{ip, subnet.Mask}
 	vpnServer.ippool.subnet = subnet
 
-	//fixMSS(iface.Name(), true)
-
 	go vpnServer.cleanUp()
 
 	go vpnServer.run()
