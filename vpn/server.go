@@ -21,44 +21,43 @@ package vpn
 import (
 	"net"
 
-	. "github.com/zreigz/ws-vpn/utils"
 	"github.com/songgao/water"
+	. "github.com/zreigz/ws-vpn/utils"
 
+	"fmt"
 	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
-	"fmt"
 
 	"golang.org/x/net/ipv4"
 )
 
 type VpnServer struct {
 	// config
-	cfg        ServerConfig
+	cfg ServerConfig
 	// interface
-	iface      *water.Interface
+	iface *water.Interface
 	// subnet
-	ipnet      *net.IPNet
+	ipnet *net.IPNet
 	// IP Pool
-	ippool     *VpnIpPool
+	ippool *VpnIpPool
 	// client peers, key is the mac address, value is a HopPeer record
 
 	// Registered clients
-	clients    map[string]*connection
+	clients map[string]*connection
 
 	// Register requests
-	register   chan *connection
+	register chan *connection
 
 	// Unregister requests
 	unregister chan *connection
 
-	outData  *Data
+	outData *Data
 
 	inData chan *Data
 
 	toIface chan []byte
-
 }
 
 func NewServer(cfg ServerConfig) error {
@@ -91,13 +90,11 @@ func NewServer(cfg ServerConfig) error {
 
 	go vpnServer.run()
 
-
 	vpnServer.register = make(chan *connection)
 	vpnServer.unregister = make(chan *connection)
 	vpnServer.clients = make(map[string]*connection)
 	vpnServer.inData = make(chan *Data, 100)
 	vpnServer.toIface = make(chan []byte, 100)
-
 
 	vpnServer.handleInterface()
 
@@ -113,7 +110,7 @@ func NewServer(cfg ServerConfig) error {
 
 }
 
-func (srv *VpnServer)serveWs(w http.ResponseWriter, r *http.Request) {
+func (srv *VpnServer) serveWs(w http.ResponseWriter, r *http.Request) {
 	if r.Method != "GET" {
 		http.Error(w, "Method not allowed", 405)
 		return
@@ -146,7 +143,7 @@ func (srv *VpnServer) run() {
 				if c.ipAddress != nil {
 					srv.ippool.relase(c.ipAddress.IP)
 				}
-				logger.Info("Connection removed:",c.ipAddress.IP)
+				logger.Info("Connection removed:", c.ipAddress.IP)
 				logger.Info("Number active clients:", len(srv.clients))
 			}
 			break
@@ -187,13 +184,11 @@ func (srv *VpnServer) handleInterface() {
 				logger.Debug("Sending to client: ", client.ipAddress)
 				client.data <- &Data{
 					ConnectionState: STATE_CONNECTED,
-					Payload: packet[:plen],
+					Payload:         packet[:plen],
 				}
 			} else {
 				logger.Error("Client not found ", clientIP)
 			}
-
-
 
 		}
 	}()
@@ -212,7 +207,3 @@ func (srv *VpnServer) cleanUp() {
 
 	os.Exit(0)
 }
-
-
-
-

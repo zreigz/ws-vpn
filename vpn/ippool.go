@@ -30,7 +30,6 @@ type VpnIpPool struct {
 
 var poolFull = errors.New("IP Pool Full")
 
-
 func (p *VpnIpPool) next() (*net.IPNet, error) {
 	found := false
 	var i int
@@ -65,4 +64,3 @@ func (p *VpnIpPool) relase(ip net.IP) {
 	i := ip[3]
 	p.pool[i] = 0
 }
-

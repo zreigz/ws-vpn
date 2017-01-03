@@ -23,13 +23,13 @@ import (
 	"net"
 
 	. "github.com/zreigz/ws-vpn/utils"
+	"net/url"
 	"os"
 	"os/signal"
 	"syscall"
-	"net/url"
 
-	"github.com/gorilla/websocket"
 	"encoding/json"
+	"github.com/gorilla/websocket"
 
 	"time"
 
@@ -38,21 +38,21 @@ import (
 
 type Client struct {
 	// config
-	cfg     ClientConfig
+	cfg ClientConfig
 	// interface
-	iface   *water.Interface
+	iface *water.Interface
 	// ip addr
-	ip      net.IP
+	ip net.IP
 
 	toIface chan []byte
 
-	ws      *websocket.Conn
+	ws *websocket.Conn
 
-	data    chan *Data
+	data chan *Data
 
-	state   int
+	state int
 
-	routes  []string
+	routes []string
 }
 
 var net_gateway, net_nic string
@@ -118,10 +118,10 @@ func NewClient(cfg ClientConfig) error {
 	client.state = STATE_INIT
 
 	client.ws.SetReadLimit(maxMessageSize)
-	client.ws.SetReadDeadline(time.Now().Add(pongWait));
+	client.ws.SetReadDeadline(time.Now().Add(pongWait))
 	client.ws.SetPongHandler(func(string) error {
-		client.ws.SetReadDeadline(time.Now().Add(pongWait));
-		logger.Debug("Pong received");
+		client.ws.SetReadDeadline(time.Now().Add(pongWait))
+		logger.Debug("Pong received")
 		return nil
 	})
 
@@ -209,7 +209,7 @@ func (clt *Client) handleInterface() {
 			}
 			clt.data <- &Data{
 				ConnectionState: STATE_CONNECTED,
-				Payload: packet[:plen],
+				Payload:         packet[:plen],
 			}
 
 		}

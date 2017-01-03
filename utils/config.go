@@ -40,10 +40,10 @@ type ClientConfig struct {
 
 type VpnConfig struct {
 	Default struct {
-			Mode string
-		}
-	Server  ServerConfig
-	Client  ClientConfig
+		Mode string
+	}
+	Server ServerConfig
+	Client ClientConfig
 }
 
 func ParseConfig(filename string) (interface{}, error) {
@@ -61,4 +61,3 @@ func ParseConfig(filename string) (interface{}, error) {
 		return nil, errors.New("Wrong config data")
 	}
 }
-

@@ -18,17 +18,17 @@
 package vpn
 
 import (
-	"time"
-	"github.com/gorilla/websocket"
 	"encoding/json"
+	"github.com/gorilla/websocket"
 	"io"
 	"net"
+	"time"
 )
 
 const (
-	writeWait = 10 * time.Second
-	pongWait = 30 * time.Second
-	pingPeriod = (pongWait) / 10
+	writeWait      = 10 * time.Second
+	pongWait       = 30 * time.Second
+	pingPeriod     = (pongWait) / 10
 	maxMessageSize = 1024 * 1024
 )
 
@@ -114,7 +114,7 @@ func (c *connection) writePump() {
 		if c != nil {
 			select {
 			case message, ok := <-c.data:
-			        // Thread can be still active after close connection
+				// Thread can be still active after close connection
 				if message != nil {
 					logger.Debug("writePump data len: ", len(message.Payload))
 					if !ok {
@@ -150,7 +150,6 @@ func (c *connection) write(mt int, message *Data) error {
 			logger.Panic(err)
 			return err
 		}
-
 
 		err = c.ws.WriteMessage(mt, s)
 		if err != nil {

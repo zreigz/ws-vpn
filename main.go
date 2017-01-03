@@ -24,19 +24,17 @@ import (
 	"runtime"
 
 	. "github.com/zreigz/ws-vpn/utils"
-	server "github.com/zreigz/ws-vpn/vpn"
 	client "github.com/zreigz/ws-vpn/vpn"
+	server "github.com/zreigz/ws-vpn/vpn"
 )
 
 var debug bool
 var cfgFile string
 
-
 func main() {
 	flag.BoolVar(&debug, "debug", false, "Provide debug info")
 	flag.StringVar(&cfgFile, "config", "", "configfile")
 	flag.Parse()
-
 
 	InitLogger(debug)
 	logger := GetLogger()

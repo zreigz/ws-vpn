@@ -18,6 +18,6 @@
 package vpn
 
 type Data struct {
-	ConnectionState int `json:"connectionState"`
-	Payload []byte `json:"payload"`
+	ConnectionState int    `json:"connectionState"`
+	Payload         []byte `json:"payload"`
 }

@@ -27,7 +27,6 @@ const (
 	IFACE_BUFSIZE = 2000
 )
 
-
 const (
 	STATE_INIT = 0
 
