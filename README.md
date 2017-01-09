@@ -32,3 +32,27 @@ ws-vpn is a go-gettable package:
 ```
 go get github.com/zreigz/ws-vpn
 ```
+
+### Network forwarding
+On the server the IP forwarding is needed. First we need to be sure that IP forwarding is enabled.
+Very often this is disabled by default. This is done by running the following command line as root:
+```
+# sysctl -w net.ipv4.ip_forward=1
+# iptables -t nat -A POSTROUTING -j MASQUERADE
+```
+
+So, lets look at the iptables rules required for this to work.
+```
+# Allow TUN interface connections to VPN server
+iptables -A INPUT -i tun0 -j ACCEPT
+
+ # Allow TUN interface connections to be forwarded through other interfaces
+iptables -A FORWARD -i tun0 -j ACCEPT
+
+iptables -t nat -A POSTROUTING -o tun0 -j MASQUERADE
+
+iptables -A FORWARD -i eth0 -o tun0 -j ACCEPT
+
+iptables -A FORWARD -i tun0 -o eth0 -m state --state RELATED,ESTABLISHED -j ACCEPT
+
+```
