@@ -35,29 +35,29 @@ import (
 
 type VpnServer struct {
 	// config
-	cfg ServerConfig
+	cfg        ServerConfig
 	// interface
-	iface *water.Interface
+	iface      *water.Interface
 	// subnet
-	ipnet *net.IPNet
+	ipnet      *net.IPNet
 	// IP Pool
-	ippool *VpnIpPool
+	ippool     *VpnIpPool
 	// client peers, key is the mac address, value is a HopPeer record
 
 	// Registered clients
-	clients map[string]*connection
+	clients    map[string]*connection
 
 	// Register requests
-	register chan *connection
+	register   chan *connection
 
 	// Unregister requests
 	unregister chan *connection
 
-	outData *Data
+	outData    *Data
 
-	inData chan *Data
+	inData     chan *Data
 
-	toIface chan []byte
+	toIface    chan []byte
 }
 
 func NewServer(cfg ServerConfig) error {
@@ -176,22 +176,38 @@ func (srv *VpnServer) handleInterface() {
 				break
 			}
 			header, _ := ipv4.ParseHeader(packet[:plen])
-			logger.Debug("Sending to remote: ", header)
-
+			logger.Debug("Try sending: ", header)
 			clientIP := header.Dst.String()
 			client, ok := srv.clients[clientIP]
 			if ok {
+				if !srv.cfg.Interconnection {
+					if srv.isConnectionBetweenClients(header) {
+						logger.Info("Drop connection betwenn ", header.Src, header.Dst)
+						continue
+					}
+				}
+
 				logger.Debug("Sending to client: ", client.ipAddress)
 				client.data <- &Data{
 					ConnectionState: STATE_CONNECTED,
 					Payload:         packet[:plen],
 				}
+
 			} else {
-				logger.Error("Client not found ", clientIP)
+				logger.Warning("Client not found ", clientIP)
 			}
 
 		}
 	}()
+}
+
+func (srv *VpnServer) isConnectionBetweenClients(header *ipv4.Header) bool {
+
+	if (header.Src.String() != header.Dst.String() && header.Src.String() != srv.ipnet.IP.String() && srv.ippool.subnet.Contains(header.Dst)) {
+		return true
+	}
+
+	return false
 }
 
 func (srv *VpnServer) cleanUp() {

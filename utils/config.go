@@ -25,25 +25,27 @@ import (
 
 // Server Config
 type ServerConfig struct {
-	Port       int
-	ListenAddr string
-	VpnAddr    string
-	MTU        int
+	Port            int
+	ListenAddr      string
+	VpnAddr         string
+	MTU             int
+	Interconnection bool
 }
 
 // Client Config
 type ClientConfig struct {
-	Server string
-	Port   int
-	MTU    int
+	Server          string
+	Port            int
+	MTU             int
+	RedirectGateway bool
 }
 
 type VpnConfig struct {
 	Default struct {
-		Mode string
-	}
-	Server ServerConfig
-	Client ClientConfig
+			Mode string
+		}
+	Server  ServerConfig
+	Client  ClientConfig
 }
 
 func ParseConfig(filename string) (interface{}, error) {

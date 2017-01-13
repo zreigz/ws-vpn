@@ -151,7 +151,6 @@ func NewClient(cfg ClientConfig) error {
 		}
 
 	}
-
 	return errors.New("Not expected to exit")
 }
 
@@ -171,9 +170,11 @@ func (clt *Client) dispatcher(p []byte) {
 			ipStr := string(message.Payload)
 			ip, subnet, _ := net.ParseCIDR(ipStr)
 			setTunIP(clt.iface, ip, subnet)
-			err := redirectGateway(clt.iface.Name(), tun_peer.String())
-			if err != nil {
-				logger.Error("Redirect gateway error", err.Error())
+			if clt.cfg.RedirectGateway {
+				err := redirectGateway(clt.iface.Name(), tun_peer.String())
+				if err != nil {
+					logger.Error("Redirect gateway error", err.Error())
+				}
 			}
 
 			clt.state = STATE_CONNECTED
