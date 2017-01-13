@@ -23,7 +23,7 @@ import (
 	"os"
 	"runtime"
 
-	. "github.com/zreigz/ws-vpn/utils"
+	. "github.com/zreigz/ws-vpn/vpn/utils"
 	client "github.com/zreigz/ws-vpn/vpn"
 	server "github.com/zreigz/ws-vpn/vpn"
 )

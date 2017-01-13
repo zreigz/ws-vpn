@@ -22,7 +22,7 @@ import (
 	"net"
 
 	"github.com/songgao/water"
-	. "github.com/zreigz/ws-vpn/utils"
+	. "github.com/zreigz/ws-vpn/vpn/utils"
 
 	"fmt"
 	"net/http"

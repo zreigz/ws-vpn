@@ -17,7 +17,7 @@
  */
 package vpn
 
-import loging "github.com/zreigz/ws-vpn/utils"
+import loging "github.com/zreigz/ws-vpn/vpn/utils"
 
 var logger = loging.GetLogger()
 
@@ -33,6 +33,4 @@ const (
 	STATE_CONNECT = 1
 
 	STATE_CONNECTED = 2
-
-	STATE_DISCONNECT = 3
 )
