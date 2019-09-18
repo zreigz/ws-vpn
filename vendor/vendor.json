@@ -1,6 +1,99 @@
 {
 	"comment": "",
 	"ignore": "test",
-	"package": [],
+	"package": [
+		{
+			"path": "-v",
+			"revision": ""
+		},
+		{
+			"path": "all",
+			"revision": ""
+		},
+		{
+			"checksumSHA1": "ajAqUByI39Sfm99F/ZNOguPP3Mk=",
+			"path": "github.com/gorilla/websocket",
+			"revision": "c3e18be99d19e6b3e8f1559eea2c161a665c4b6b",
+			"revisionTime": "2019-08-25T01:20:11Z"
+		},
+		{
+			"checksumSHA1": "BoXdUBWB8UnSlFlbnuTQaPqfCGk=",
+			"path": "github.com/op/go-logging",
+			"revision": "970db520ece77730c7e4724c61121037378659d9",
+			"revisionTime": "2016-03-15T20:05:05Z"
+		},
+		{
+			"checksumSHA1": "TXpUFvKVEIHH5//3sbRVv6wgSUU=",
+			"path": "github.com/scalingdata/gcfg",
+			"revision": "37aabad69cfd3d20b8390d902a8b10e245c615ff",
+			"revisionTime": "2014-07-29T18:38:56Z"
+		},
+		{
+			"checksumSHA1": "LV3NB8wXu26KZwc6pAStcxE+ESQ=",
+			"path": "github.com/scalingdata/gcfg/scanner",
+			"revision": "37aabad69cfd3d20b8390d902a8b10e245c615ff",
+			"revisionTime": "2014-07-29T18:38:56Z"
+		},
+		{
+			"checksumSHA1": "ExoT8iEbM4K8c4b3mQglfuPkxzw=",
+			"path": "github.com/scalingdata/gcfg/token",
+			"revision": "37aabad69cfd3d20b8390d902a8b10e245c615ff",
+			"revisionTime": "2014-07-29T18:38:56Z"
+		},
+		{
+			"checksumSHA1": "hmKm+qy874Gta477MI+wlzxG2JM=",
+			"path": "github.com/scalingdata/gcfg/types",
+			"revision": "37aabad69cfd3d20b8390d902a8b10e245c615ff",
+			"revisionTime": "2014-07-29T18:38:56Z"
+		},
+		{
+			"checksumSHA1": "fJhbYaAmKx1WfLtKcN9vfWrfbLU=",
+			"path": "github.com/songgao/water",
+			"revision": "fd331bda3f4bbc9aad07ccd4bd2abaa1e363a852",
+			"revisionTime": "2019-07-25T07:32:26Z"
+		},
+		{
+			"checksumSHA1": "4rZ8D9GLDvy+6S940nMs75DvyfA=",
+			"path": "golang.org/x/net/bpf",
+			"revision": "24e19bdeb0f2d062d8e2640d50a7aaf2a7f80e7a",
+			"revisionTime": "2019-06-07T04:56:05Z"
+		},
+		{
+			"checksumSHA1": "CHpYrf4HcmHB60gnTNxgjGgY53w=",
+			"path": "golang.org/x/net/internal/iana",
+			"revision": "24e19bdeb0f2d062d8e2640d50a7aaf2a7f80e7a",
+			"revisionTime": "2019-06-07T04:56:05Z"
+		},
+		{
+			"checksumSHA1": "4vBBc8EXFsyNS8lJ4g8ljXUlYqo=",
+			"path": "golang.org/x/net/internal/socket",
+			"revision": "24e19bdeb0f2d062d8e2640d50a7aaf2a7f80e7a",
+			"revisionTime": "2019-06-07T04:56:05Z"
+		},
+		{
+			"checksumSHA1": "BeKuwferCpRcN+C4oEQGm/pdTAU=",
+			"path": "golang.org/x/net/ipv4",
+			"revision": "24e19bdeb0f2d062d8e2640d50a7aaf2a7f80e7a",
+			"revisionTime": "2019-06-07T04:56:05Z"
+		},
+		{
+			"checksumSHA1": "vng7KQUjr7YzuxySU+KIh7Ki7mA=",
+			"path": "golang.org/x/sys/unix",
+			"revision": "c3b328c6e5a763a2bfc82a48b4bd855037210934",
+			"revisionTime": "2019-09-13T12:12:07Z"
+		},
+		{
+			"checksumSHA1": "U4rR1I0MXcvJz3zSxTp3hb3Y0I0=",
+			"path": "golang.org/x/sys/windows",
+			"revision": "c3b328c6e5a763a2bfc82a48b4bd855037210934",
+			"revisionTime": "2019-09-13T12:12:07Z"
+		},
+		{
+			"checksumSHA1": "FCBHX83YaM1LmNHtSM30BKmbJQY=",
+			"path": "golang.org/x/sys/windows/registry",
+			"revision": "c3b328c6e5a763a2bfc82a48b4bd855037210934",
+			"revisionTime": "2019-09-13T12:12:07Z"
+		}
+	],
 	"rootPath": "github.com/zreigz/ws-vpn"
 }
